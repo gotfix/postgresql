@@ -1,7 +1,7 @@
 all: build
 
 build:
-	@docker build --tag=phpbcom/postgresql .
+	@docker build --tag=phpbcom/docker-postgresql .
 
 release: build
-	@docker build --tag=phpbcom/postgresql:$(shell cat VERSION) .
+	@docker build --tag=phpbcom/docker-postgresql:$(shell cat VERSION) .

@@ -8,6 +8,6 @@ dependencies:
 
 test:
   override:
-    - docker build -t phpbcom/postgresql .
-    - docker run -d --name=postgresql phpbcom/postgresql; sleep 10
-    - docker run -it --volumes-from=postgresql phpbcom/postgresql sudo -u postgres -H psql -c "\conninfo"
+    - docker build -t phpbcom/docker-postgresql .
+    - docker run -d --name=postgresql phpbcom/docker-postgresql; sleep 10
+    - docker run -it --volumes-from=postgresql phpbcom/docker-postgresql sudo -u postgres -H psql -c "\conninfo"

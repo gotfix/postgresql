@@ -1,6 +1,6 @@
 PostgreSQL:
   restart: always
-  image: phpbcom/postgresql:9.6.2-1
+  image: phpbcom/docker-postgresql:9.6.2-1
   ports:
     - "5432:5432"
   environment:

@@ -1,7 +1,8 @@
 # Changelog
 
-**10**
-- postgresql: upgrade tp 10
+**9.6.2-1**
+- postgresql: upgrade tp 9.6.2-1
+- upgrade base image to ubuntu xenial 16.04
 
 **9.6**
 - postgresql: upgrade to 9.6

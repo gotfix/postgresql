@@ -1,5 +1,6 @@
-
 # phpbcom/docker-postgresql:9.6.2-1
+
+**NOTE**: This project was forked from sameersbn/docker-postgresql to maintain slightly more modern and less conservative (i.e., things will break) version of the docker image.
 
 - [Introduction](#introduction)
   - [Contributing](#contributing)
@@ -37,7 +38,6 @@ If you find this image useful here's how you can help:
 
 - Send a pull request with your awesome features and bug fixes
 - Help users resolve their [issues](../../issues?q=is%3Aopen+is%3Aissue).
-- Support the development of this image with a [donation](http://www.damagehead.com/donate/)
 
 ## Issues
 

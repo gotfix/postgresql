@@ -1,3 +1,5 @@
+[![build status](https://gotfix.com/docker/postgresql/badges/master/build.svg)](https://gotfix.com/docker/postgresql/commits/master)
+
 # phpbcom/docker-postgresql:9.6.2-1
 
 **NOTE**: This project was forked from sameersbn/docker-postgresql to maintain slightly more modern and less conservative (i.e., things will break) version of the docker image.

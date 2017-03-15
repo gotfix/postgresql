@@ -1,5 +1,6 @@
 # Changelog
 
+**9.6.2-3**
 **9.6.2-2**
 - postgresql: upgrade tp 9.6.2-1
 - Update README with correct information

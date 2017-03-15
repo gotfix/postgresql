@@ -2,13 +2,70 @@
 # Official docker image.
 image: docker:latest
 
+variables:
+  NO_PROXY: "127.0.0.1, localhost, docker, registry, *.gotfix.com"
+  DOCKER_DRIVER: overlay
+  DOCKER_HUB_BASE: gotfix/postgresql
+  GITHUB_REPO_URL: https://phpb-com:${GITHUB_TOKEN}@github.com/phpb-com/docker-postgresql.git
+
 services:
   - docker:dind
+
+stages:
+ - build
+ - release
+ - mirror
+
+before_script:
+  - export IMAGE_TAG=$(echo -en $CI_BUILD_REF_NAME | tr -c '[:alnum:]_.-' '-')
+  - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
 
 build:
   stage: build
   script:
-    - export IMAGE_TAG=$(echo -en $CI_BUILD_REF_NAME | tr -c '[:alnum:]_.-' '-')
-    - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
+    - docker build 
+        --build-arg=http_proxy=${HTTP_PROXY}
+        --build-arg=HTTP_PROXY=${HTTP_PROXY}
+        --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
     - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+  except:
+    - latest
+
+tag-latest:
+  image: docker:git
+  stage: release
+  script:
+    - git config --global user.email "ci@gotfix.com"
+    - git config --global user.name "CI Build"
+    - git tag -fa latest -m "CI Build auto-tagged, latest master branch ref"
+    - git push --force https://${ACCESS_USER}:${ACCESS_TOKEN}@gotfix.com/docker/postgresql.git refs/tags/latest
+  only:
+    - master
+
+release:
+  stage: release
+  script:
+    - docker pull "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}"
+    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}"
+    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}:${IMAGE_TAG}"
+    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}:latest"
+    - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
+    - docker push "${DOCKER_HUB_BASE}"
+    - docker push "${DOCKER_HUB_BASE}:${IMAGE_TAG}"
+    - docker push "${DOCKER_HUB_BASE}:latest"
+  only:
+    - master
+    - tags
+  except:
+    - latest
+
+github_mirror:
+  type: mirror
+  image: docker:git
+  script:
+    - mkdir -p "${WORK_DIR}/mirror" && cd "${WORK_DIR}/mirror"
+    - git clone -q --mirror "${CI_BUILD_REPO}"
+    - cd "${CI_PROJECT_NAME}.git"
+    - git push -q --mirror "${GITHUB_REPO_URL}"
+  except:
+    - latest

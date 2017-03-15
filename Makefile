@@ -1,7 +1,7 @@
 all: build
 
 build:
-	@docker build --tag=phpbcom/docker-postgresql .
+	@docker build --tag=quay.io/gotfix/postgresql .
 
 release: build
-	@docker build --tag=phpbcom/docker-postgresql:$(shell cat VERSION) .
+	@docker build --tag=quay.io/gotfix/postgresql:$(shell cat VERSION) .

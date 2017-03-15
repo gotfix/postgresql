@@ -1,4 +1,4 @@
-[![build status](https://gotfix.com/docker/postgresql/badges/master/build.svg)](https://gotfix.com/docker/postgresql/commits/master)
+[![build status](https://gotfix.com/docker/postgresql/badges/master/build.svg)](https://gotfix.com/docker/postgresql/commits/master) [![Docker Repository on Quay](https://quay.io/repository/gotfix/postgresql/status "Docker Repository on Quay")](https://quay.io/repository/gotfix/postgresql)
 
 # quay.io/gotfix/postgresql:9.6.2-2
 

@@ -38,6 +38,6 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
 EXPOSE 5432/tcp
-VOLUME ["${PG_HOME}", "${PG_RUNDIR}"]
+VOLUME ["${PG_HOME}", "${PG_RUNDIR}", "${PG_LOGDIR}"]
 WORKDIR ${PG_HOME}
 ENTRYPOINT ["/sbin/entrypoint.sh"]

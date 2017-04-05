@@ -17,8 +17,13 @@ stages:
  - mirror
 
 before_script:
+  - export VCS_REF=${CI_COMMIT_SHA:0:7}
+  - export VCS_BRANCH=${CI_COMMIT_REF_NAME}
   - export IMAGE_TAG=$(echo -en $CI_BUILD_REF_NAME | tr -c '[:alnum:]_.-' '-')
-  - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $CI_REGISTRY
+  - export IMAGE_TAG_SHA=${VCS_REF}
+  - export REGISTRY_IMAGE_BASE=${DOCKER_HUB_BASE}
+  - export REGISTRY_IMAGE="${REGISTRY_IMAGE_BASE}:${IMAGE_TAG_SHA}"
+  - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
 
 build:
   stage: build
@@ -26,8 +31,12 @@ build:
     - docker build 
         --build-arg=http_proxy=${HTTP_PROXY}
         --build-arg=HTTP_PROXY=${HTTP_PROXY}
-        --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
-    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
+        --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        --build-arg VCS_REF=${VCS_REF}
+        --build-arg VCS_BRANCH=${VCS_BRANCH}
+        --build-arg VERSION=$(cat VERSION)
+        --pull -t "${REGISTRY_IMAGE}" .
+    - docker push "${REGISTRY_IMAGE}"
   except:
     - latest
 
@@ -40,24 +49,20 @@ tag-latest:
     - git tag -fa latest -m "CI Build auto-tagged, latest master branch ref"
     - git push --force https://${ACCESS_USER}:${ACCESS_TOKEN}@gotfix.com/docker/postgresql.git refs/tags/latest
   only:
-    - master
+    - /^[0-9-.]+$/
 
 release:
   stage: release
   script:
-    - docker pull "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}"
-    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}"
-    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}:${IMAGE_TAG}"
-    - docker tag "${CI_REGISTRY_IMAGE}:${IMAGE_TAG}" "${DOCKER_HUB_BASE}:latest"
-    - docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
-    - docker push "${DOCKER_HUB_BASE}"
-    - docker push "${DOCKER_HUB_BASE}:${IMAGE_TAG}"
-    - docker push "${DOCKER_HUB_BASE}:latest"
+    - docker pull "${REGISTRY_IMAGE}"
+    - docker tag "${REGISTRY_IMAGE}" "${REGISTRY_IMAGE_BASE}"
+    - docker tag "${REGISTRY_IMAGE}" "${REGISTRY_IMAGE_BASE}:${IMAGE_TAG}"
+    - docker tag "${REGISTRY_IMAGE}" "${REGISTRY_IMAGE_BASE}:latest"
+    - docker push "${REGISTRY_IMAGE_BASE}"
+    - docker push "${REGISTRY_IMAGE_BASE}:${IMAGE_TAG}"
+    - docker push "${REGISTRY_IMAGE_BASE}:latest"
   only:
-    - master
-    - tags
-  except:
-    - latest
+    - /^[0-9.-]+$/
 
 github_mirror:
   type: mirror

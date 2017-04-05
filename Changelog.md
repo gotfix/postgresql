@@ -1,5 +1,10 @@
 # Changelog
 
+**9.6.2-4**
+- postgresql: upgrade tp 9.6.2-1
+- Move main image to docker hub
+- Add ability to tune postgresql
+
 **9.6.2-3**
 **9.6.2-2**
 - postgresql: upgrade tp 9.6.2-1

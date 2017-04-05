@@ -26,6 +26,7 @@
   - [Command-line arguments](#command-line-arguments)
   - [Logs](#logs)
   - [UID/GID mapping](#uidgid-mapping)
+  - [Tunables](#tunables)
 - [Maintenance](#maintenance)
   - [Upgrading](#upgrading)
   - [Shell Access](#shell-access)
@@ -345,6 +346,22 @@ docker run --name postgresql -itd --restart always \
   --env 'USERMAP_UID=999' --env 'USERMAP_GID=999' \
   gotfix/postgresql:9.6.2-3
 ```
+
+# Tunables
+
+You can now tune your container with the set of parameters that suit your workload with the help of [pgtune](http://pgtune.leopard.in.ua). The following list with the defaults will allow you to make changes at the container start-up time. The defaults are tuned for DB Type:Web Application and the node with 4GB or RAM.
+
+- **TUNE_MAX_CONNECTIONS** - Default is `256`
+- **TUNE_SHARED_BUFFERS** - Default is `1GB`
+- **TUNE_EFFECTIVE_CACHE_SIZE** - Default is `3GB`
+- **TUNE_WORK_MEM** - Default is `4MB`
+- **TUNE_MAINTENANCE_WORK_MEM** - Default is `256MB`
+- **TUNE_MIN_WAL_SIZE** - Default is `1GB`
+- **TUNE_MAX_WAL_SIZE** - Default is `2GB`
+- **TUNE_CHECKPOINT_COMPLETION_TARGET** - Default is `0.7`
+- **TUNE_WAL_BUFFERS** - Default is `16MB`
+- **TUNE_DEFAULT_STATISTICS_TARGET** - Default is `100`
+
 
 # Maintenance
 

@@ -369,10 +369,26 @@ create_replication_user() {
   fi
 }
 
+configure_postgresql_tunables() {
+  set_postgresql_param "max_connections" ${TUNE_MAX_CONNECTIONS} quiet
+  set_postgresql_param "shared_buffers" ${TUNE_SHARED_BUFFERS} quiet
+  set_postgresql_param "effective_cache_size" ${TUNE_EFFECTIVE_CACHE_SIZE} quiet
+  set_postgresql_param "work_mem" ${TUNE_WORK_MEM} quiet
+  set_postgresql_param "maintenance_work_mem" ${TUNE_MAINTENANCE_WORK_MEM} quiet
+  set_postgresql_param "min_wal_size" ${TUNE_MIN_WAL_SIZE} quiet
+  set_postgresql_param "max_wal_size" ${TUNE_MAX_WAL_SIZE} quiet
+  set_postgresql_param "checkpoint_completion_target" ${TUNE_CHECKPOINT_COMPLETION_TARGET} quiet
+  set_postgresql_param "wal_buffers" ${TUNE_WAL_BUFFERS} quiet
+  set_postgresql_param "default_statistics_target" ${TUNE_DEFAULT_STATISTICS_TARGET} quiet
+}
+
 configure_postgresql() {
   initialize_database
   configure_recovery
   configure_ssl
+
+  #configure tunables
+  configure_postgresql_tunables
 
   # start postgres server internally for the creation of users and databases
   rm -rf ${PG_DATADIR}/postmaster.pid

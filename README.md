@@ -69,7 +69,7 @@ docker pull gotfix/postgresql:9.6.2-4
 Alternatively you can build the image yourself.
 
 ```bash
-docker build -t gotfix/postgresql github.com/phpb-com/docker-postgresql
+docker build -t gotfix/postgresql gotfix.com/docker/postgresql
 ```
 
 ## Quickstart

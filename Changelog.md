@@ -1,17 +1,21 @@
 # Changelog
 
+**9.6.2-5**
+- postgresql: upgrade to 9.6.2-1
+- Fix CI variables
+
 **9.6.2-4**
-- postgresql: upgrade tp 9.6.2-1
+- postgresql: upgrade to 9.6.2-1
 - Move main image to docker hub
 - Add ability to tune postgresql
 
 **9.6.2-3**
 **9.6.2-2**
-- postgresql: upgrade tp 9.6.2-1
+- postgresql: upgrade to 9.6.2-1
 - Update README with correct information
 
 **9.6.2-1**
-- postgresql: upgrade tp 9.6.2-1
+- postgresql: upgrade to 9.6.2-1
 - upgrade base image to ubuntu xenial 16.04
 
 **9.6**

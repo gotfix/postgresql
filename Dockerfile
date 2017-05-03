@@ -35,7 +35,7 @@ RUN mkdir -p /etc/postgresql/${PG_VERSION}/main/ \
  && ln -sf ${PG_DATADIR}/postgresql.conf /etc/postgresql/${PG_VERSION}/main/postgresql.conf \
  && ln -sf ${PG_DATADIR}/pg_hba.conf /etc/postgresql/${PG_VERSION}/main/pg_hba.conf \
  && ln -sf ${PG_DATADIR}/pg_ident.conf /etc/postgresql/${PG_VERSION}/main/pg_ident.conf \
- && umount -f ${PG_HOME}/data \
+ && umount -f -R ${PG_HOME}/data \
  && rm -rf ${PG_HOME}/data \
  && rm -rf ${PG_HOME}
 
